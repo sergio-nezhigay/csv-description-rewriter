@@ -54,7 +54,7 @@ async function processCSV(inputFile: string, outputFile: string) {
         processedRows.push(processedRow);
       }
 
-      const ws = fs.createWriteStream(outputFile);
+      const ws = fs.createWriteStream(outputFile, { flags: "w" });
       const csvStream = format({ headers: true });
       csvStream.pipe(ws);
       processedRows.forEach((row) => csvStream.write(row));
