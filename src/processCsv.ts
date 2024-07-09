@@ -1,13 +1,13 @@
-import fs from 'fs';
-import csv from 'csv-parser';
-import { format } from '@fast-csv/format';
-import OpenAI from 'openai';
-import dotenv from 'dotenv';
+import fs from "fs";
+import csv from "csv-parser";
+import { format } from "@fast-csv/format";
+import OpenAI from "openai";
+import dotenv from "dotenv";
 
 dotenv.config();
 
 const openai = new OpenAI({
-  apiKey: process.env['OPENAI_API_KEY'], // Ensure you have set your API key in the .env file
+  apiKey: process.env["OPENAI_API_KEY"],
 });
 
 interface CSVRow {
@@ -18,13 +18,13 @@ interface CSVRow {
 async function processRow(row: CSVRow): Promise<CSVRow> {
   const content = row.content;
   const response = await openai.chat.completions.create({
-    messages: [{ role: 'user', content: content }],
-    model: 'gpt-3.5-turbo',
+    messages: [{ role: "user", content: content }],
+    model: "gpt-3.5-turbo",
   });
 
   return {
     ...row,
-    processedContent: response.choices[0]?.message?.content || 'No response',
+    processedContent: response.choices[0]?.message?.content || "No response",
   };
 }
 
@@ -33,8 +33,8 @@ async function processCSV(inputFile: string, outputFile: string) {
 
   fs.createReadStream(inputFile)
     .pipe(csv())
-    .on('data', (data) => rows.push(data))
-    .on('end', async () => {
+    .on("data", (data) => rows.push(data))
+    .on("end", async () => {
       const processedRows: CSVRow[] = [];
 
       for (const row of rows) {
@@ -47,12 +47,12 @@ async function processCSV(inputFile: string, outputFile: string) {
       csvStream.pipe(ws);
       processedRows.forEach((row) => csvStream.write(row));
       csvStream.end();
-      console.log('CSV processing complete.');
+      console.log("CSV processing complete.");
     });
 }
 
 // Update these file paths as needed
-const inputFilePath = 'input.csv';
-const outputFilePath = 'output.csv';
+const inputFilePath = "input.csv";
+const outputFilePath = "output.csv";
 
 processCSV(inputFilePath, outputFilePath);
