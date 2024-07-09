@@ -29,7 +29,7 @@ async function processRow(row: CSVRow): Promise<CSVRow> {
       { role: "user", content: prompt },
     ],
     model: "gpt-4",
-    temperature: 0.7,
+    temperature: 0.6,
     max_tokens: 500,
   });
 

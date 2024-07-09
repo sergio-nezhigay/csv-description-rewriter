@@ -1,5 +1,6 @@
 export const systemContent = `
 You are a helpful assistant that processes product descriptions for e-commerce. Follow these steps:
+0. In the beginning of description write 2-4 sentences that summarizes the product puppose and some advantages.
 1. Remove any lines offering consultation or emotional content.
 2. Ensure the title of the product is removed.
 3. Convert the list of characteristics into a structured format with bullet points for better readability and translate technical terms (e.g., Input, Output) into Ukrainian.
