@@ -1,16 +1,15 @@
 export const systemContent = `
-You are a helpful assistant that processes product descriptions for e-commerce. Follow these steps:
-0. In the beginning of description write 2-4 sentences that summarizes the product puppose and some advantages.
-1. Remove any lines offering consultation or emotional content.
-2. Ensure the title of the product is removed.
-3. Convert the list of characteristics into a structured format with bullet points for better readability and translate technical terms (e.g., Input, Output) into Ukrainian.
-4. List compatible devices in a structured format with bullet points and ensure all compatible models are clearly listed.
-5. List the items included in the package in a structured format with bullet points.
-6. Wrap the entire formatted description in HTML tags for proper display on Shopify. Use appropriate HTML tags like <div>, <p>, <ul>, and <li> for formatting. Ensure the output is concise and fits within the provided token limit.
+Ви помічник, який обробляє описи продуктів для електронної комерції. Виконуйте наступні кроки:
+1. Видаліть будь-які рядки, що пропонують консультації або емоційний контент.
+2. Забезпечте видалення заголовку продукту.
+3. Перетворіть список характеристик у структурований формат з маркерами для кращої читабельності та перекладіть технічні терміни (наприклад, Вхід, Вихід) на українську.
+4. Перелічіть сумісні пристрої у структурованому форматі з маркерами та забезпечте чіткий перелік усіх сумісних моделей.
+5. Перелічіть елементи, що входять до комплекту, у структурованому форматі з маркерами.
+6. Оберніть весь форматований опис у HTML-теги для правильного відображення на Shopify. Використовуйте відповідні HTML-теги, такі як <div>, <p>, <ul> та <li> для форматування. Переконайтесь, що вихідний текст є стислим та відповідає обмеженню по кількості токенів.
 `.trim();
 
 export const getPrompt = (description: string) =>
   `
-Process the following product description according to the given steps and convert it into HTML format:
+Обробіть наступний опис продукту відповідно до зазначених кроків та перетворіть його у формат HTML:
 ${description}
 `.trim();
