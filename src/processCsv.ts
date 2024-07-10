@@ -4,6 +4,7 @@ import { format } from "@fast-csv/format";
 import dotenv from "dotenv";
 import { CSVRow } from "./types";
 import { processRow } from "./processRow";
+import { validateInputRow } from "./validate";
 
 dotenv.config();
 
@@ -15,6 +16,13 @@ async function processCSV(inputFile: string, outputFile: string) {
     .on("data", (data) => rows.push(data))
     .on("end", async () => {
       const processedRows: CSVRow[] = [];
+
+      for (const row of rows) {
+        if (!validateInputRow(row)) {
+          console.error(`Invalid row format: ${JSON.stringify(row)}`);
+          return;
+        }
+      }
 
       for (const row of rows) {
         const processedRow = await processRow(row);
