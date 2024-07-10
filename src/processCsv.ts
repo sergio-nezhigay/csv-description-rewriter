@@ -1,44 +1,11 @@
 import fs from "fs";
 import csv from "csv-parser";
 import { format } from "@fast-csv/format";
-import OpenAI from "openai";
 import dotenv from "dotenv";
-import { systemContent, getPrompt } from "./instructions";
+import { CSVRow } from "./types";
+import { processRow } from "./processRow";
 
 dotenv.config();
-
-const openai = new OpenAI({
-  apiKey: process.env["OPENAI_API_KEY"],
-});
-
-interface CSVRow {
-  Handle: string;
-  "Variant SKU": string;
-  Title: string;
-  description: string;
-  [key: string]: string;
-}
-
-async function processRow(row: CSVRow): Promise<CSVRow> {
-  const description = row.description;
-  const prompt = getPrompt(description);
-
-  const response = await openai.chat.completions.create({
-    messages: [
-      { role: "system", content: systemContent },
-      { role: "user", content: prompt },
-    ],
-    model: "gpt-4o",
-    temperature: 0.5,
-    max_tokens: 600,
-  });
-
-  return {
-    ...row,
-    processedDescription:
-      response.choices[0]?.message?.content || "<p>No response</p>",
-  };
-}
 
 async function processCSV(inputFile: string, outputFile: string) {
   const rows: CSVRow[] = [];
@@ -60,6 +27,9 @@ async function processCSV(inputFile: string, outputFile: string) {
       processedRows.forEach((row) => csvStream.write(row));
       csvStream.end();
       console.log("CSV processing complete.");
+    })
+    .on("error", (error) => {
+      console.error("Error reading CSV file:", error);
     });
 }
 
