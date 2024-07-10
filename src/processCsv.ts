@@ -16,6 +16,8 @@ async function processCSV(inputFile: string, outputFile: string) {
     .on("data", (data) => rows.push(data))
     .on("end", async () => {
       const processedRows: CSVRow[] = [];
+      const totalRows = rows.length;
+      let processedCount = 0;
 
       for (const row of rows) {
         if (!validateInputRow(row)) {
@@ -27,6 +29,14 @@ async function processCSV(inputFile: string, outputFile: string) {
       for (const row of rows) {
         const processedRow = await processRow(row);
         processedRows.push(processedRow);
+        processedCount++;
+
+        if (processedCount % 10 === 0 || processedCount === totalRows) {
+          const percentage = ((processedCount / totalRows) * 100).toFixed(2);
+          console.log(
+            `Processed ${processedCount}/${totalRows} rows (${percentage}%)`
+          );
+        }
       }
 
       const ws = fs.createWriteStream(outputFile, { flags: "w" });
